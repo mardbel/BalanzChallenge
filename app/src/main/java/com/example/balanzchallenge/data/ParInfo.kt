@@ -22,8 +22,8 @@ data class ParInfo(
     @SerializedName("lowPrice") val lowPrice: String,
     @SerializedName("volume") val volume: String,
     @SerializedName("quoteVolume") val quoteVolume: String,
-    @SerializedName("openTime") val openTime: Int,
-    @SerializedName("closeTime") val closeTime: Int,
+    //@SerializedName("openTime") val openTime: Long,
+    //@SerializedName("closeTime") val closeTime: Long,
     @SerializedName("firstId") val firstId: Int,
     @SerializedName("lastId") val lastId: Int,
     @SerializedName("count") val count: Int

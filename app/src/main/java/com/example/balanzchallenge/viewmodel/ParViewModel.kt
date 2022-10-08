@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ParViewModel @Inject constructor(private val parRepository: ParRepository) : ViewModel() {
 
-    suspend fun getPars() {
+    fun getPairs() {
         _state.value = State.Loading()
         viewModelScope.launch {
             val pairDetails = parRepository.getPars()
@@ -24,6 +24,7 @@ class ParViewModel @Inject constructor(private val parRepository: ParRepository)
     }
 
     private val _state = MutableLiveData<State>()
+
     val state: LiveData<State>
         get() = _state
 

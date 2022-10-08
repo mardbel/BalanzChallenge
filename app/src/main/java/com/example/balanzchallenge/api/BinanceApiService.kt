@@ -3,11 +3,14 @@ package com.example.balanzchallenge.api
 import com.example.balanzchallenge.data.ParInfo
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface BinanceApiService {
 
-    @GET("api/v3/ticker/24hr?symbols={par_ids}") // revisar esta configuracion
+    val PATH : String
+
+    @GET("api/v3/ticker/24hr") // revisar esta configuracion
     suspend fun getParsInfo(
-        @Path("par_ids") id: String
+        @Query("symbols") id: String
     ): List<ParInfo>?
 }
