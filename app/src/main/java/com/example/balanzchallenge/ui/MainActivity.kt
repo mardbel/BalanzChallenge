@@ -4,28 +4,32 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.paging.RemoteMediator
-import com.example.balanzchallenge.data.ParInfo
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.balanzchallenge.data.PairInfo
+import com.example.balanzchallenge.data.PairInfoPesos
 import com.example.balanzchallenge.databinding.ActivityMainBinding
 import com.example.balanzchallenge.viewmodel.ParViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
     private val viewModel by viewModels<ParViewModel>()
-    private var searchJob: Job? = null
+    private lateinit var adapter : PairsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        adapter = PairsAdapter()
+        binding.rvRatings.layoutManager = LinearLayoutManager(this)
+        val recycler = binding.rvRatings
+        recycler.adapter = adapter
         getPairs()
     }
 
@@ -33,21 +37,24 @@ class MainActivity : AppCompatActivity() {
         viewModel.getPairs()
         viewModel.state.observe(this, Observer {
             when (it) {
-                //is ParViewModel.State.Failure -> displayError(it.cause)
-                //is ParViewModel.State.Loading -> showProgressBar()
-                is ParViewModel.State.Success -> showMovie(it.pairs)
+                is ParViewModel.State.Failure -> displayError(it.cause)
+                is ParViewModel.State.Loading -> showProgressBar()
+                is ParViewModel.State.Success -> showPairs(it.pairs)
             }
         })
     }
 
-    private fun showMovie(pairs: List<ParInfo>) {
+    private fun displayError(cause: Throwable) {
+        //TODO
+    }
 
-        binding.priceChange.text = pairs.first().prevClosePrice
-        Log.e("error", pairs.first().prevClosePrice)
+    private fun showPairs(pairs: MutableList<PairInfoPesos>) {
+        binding.progressBar.isVisible = false
+        adapter.setPairs(pairs)
     }
 
     private fun showProgressBar() {
-        //binding.progressBar.isVisible = true
+        binding.progressBar.isVisible = true
     }
 
 }
